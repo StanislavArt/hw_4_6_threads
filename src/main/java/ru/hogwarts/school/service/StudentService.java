@@ -107,7 +107,7 @@ public class StudentService {
                 .forEach(System.out::println);
     }
 
-    private synchronized static void printStudentNamesSync(List<Student> list, String nameThread) {
+    private synchronized void printStudentNamesSync(List<Student> list, String nameThread) {
         list.stream()
                 .map(s -> nameThread + s.getName())
                 .forEach(System.out::println);
