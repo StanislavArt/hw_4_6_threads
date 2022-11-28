@@ -9,6 +9,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -66,5 +67,49 @@ public class StudentService {
     public Faculty getFacultyByStudent(Long studentId) {
         logger.info("Method 'getFacultyByStudent()' was invoked");
 		return get(studentId).getFaculty();
+    }
+
+    public void getStudentNamesThreadAsync() {
+        List<Student> students = studentRepository.findAllBy();
+        int index = students.size() / 2;
+
+        Thread thread1 = new Thread(() -> {
+            printStudentNames(students.subList(0, index), "Thread 1: ");
+        });
+
+        Thread thread2 = new Thread(() -> {
+            printStudentNames(students.subList(index, students.size()), "Thread 2: ");
+        });
+
+        thread1.start();
+        thread2.start();
+    }
+
+    public void getStudentNamesThreadSync() {
+        List<Student> students = studentRepository.findAllBy();
+        int index = students.size() / 2;
+
+        Thread thread1 = new Thread(() -> {
+            printStudentNamesSync(students.subList(0, index), "Thread 1: ");
+        });
+
+        Thread thread2 = new Thread(() -> {
+            printStudentNamesSync(students.subList(index, students.size()), "Thread 2: ");
+        });
+
+        thread1.start();
+        thread2.start();
+    }
+
+    private void printStudentNames(List<Student> list, String nameThread) {
+        list.stream()
+                .map(s -> nameThread + s.getName())
+                .forEach(System.out::println);
+    }
+
+    private synchronized void printStudentNamesSync(List<Student> list, String nameThread) {
+        list.stream()
+                .map(s -> nameThread + s.getName())
+                .forEach(System.out::println);
     }
 }

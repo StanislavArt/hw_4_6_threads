@@ -74,4 +74,16 @@ public class StudentController {
     public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
         return ResponseEntity.ok(studentService.getFacultyByStudent(id));
     }
+
+    @GetMapping("names-thread-async")
+    public ResponseEntity<Void> getStudentNamesThreadAsync() {
+        studentService.getStudentNamesThreadAsync();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("names-thread-sync")
+    public ResponseEntity<Void> getStudentNamesThreadSync() {
+        studentService.getStudentNamesThreadSync();
+        return ResponseEntity.ok().build();
+    }
 }
